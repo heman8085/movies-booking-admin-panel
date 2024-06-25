@@ -1,3 +1,4 @@
+// src/pages/Login.js
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -19,7 +20,14 @@ const Login = () => {
         email,
         password
       );
-      dispatch(setUser(userCredential.user));
+      const user = userCredential.user;
+      dispatch(
+        setUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+      );
       navigate("/");
     } catch (error) {
       console.error("Error signing in: ", error);
@@ -27,10 +35,9 @@ const Login = () => {
   };
 
   return (
-      <div className="h-screen flex justify-center items-center">
-         
-          <form onSubmit={handleSubmit} className="space-y-4">
-              <h1>Login</h1>
+    <div className="h-screen flex justify-center items-center">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <h1>Login</h1>
         <input
           type="email"
           value={email}

@@ -1,44 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
-// Async thunk to fetch categories from Firestore
-export const fetchCategories = createAsyncThunk(
-  "categories/fetchCategories",
-  async () => {
-    const categoriesCollection = collection(db, "categories");
-    const snapshot = await getDocs(categoriesCollection);
-    let categories = [];
-    snapshot.forEach((doc) => {
-      categories.push({ id: doc.id, ...doc.data() });
-    });
-    return categories;
+// Define async thunk for adding a category
+export const addCategory = createAsyncThunk(
+  "categories/addCategory",
+  async (category) => {
+    const docRef = await addDoc(collection(db, "categories"), category);
+    return { id: docRef.id, ...category };
   }
 );
 
-// Slice for categories state
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: { categories: [], status: null },
-  reducers: {
-    addCategory: (state, action) => {
-      state.categories.push(action.payload);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCategories.pending, (state) => {
+      .addCase(addCategory.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.categories = action.payload;
+      .addCase(addCategory.fulfilled, (state, action) => {
+        state.categories.push(action.payload);
         state.status = "succeeded";
       })
-      .addCase(fetchCategories.rejected, (state) => {
+      .addCase(addCategory.rejected, (state) => {
         state.status = "failed";
       });
   },
 });
 
-export const { addCategory } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

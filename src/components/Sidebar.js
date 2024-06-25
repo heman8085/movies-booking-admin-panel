@@ -8,10 +8,11 @@ import CategoryIcon from "@mui/icons-material/Category";
 import MovieIcon from "@mui/icons-material/Movie";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import BookIcon from "@mui/icons-material/Book";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = () => {
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white">
+    <div className="w-64 h-screen bg-blue-500 text-white">
       <List>
         <ListItem component={Link} to="/add-category">
           <ListItemIcon>
@@ -36,6 +37,12 @@ const Sidebar = () => {
             <BookIcon className="text-white" />
           </ListItemIcon>
           <ListItemText primary="Booked Movies" />
+        </ListItem>
+        <ListItem component={Link} to="/logout" button>
+          <ListItemIcon>
+            <LogoutIcon className="text-white" />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
         </ListItem>
       </List>
     </div>

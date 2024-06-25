@@ -1,41 +1,34 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCategory } from "../features/categoriesSlice";
-import { db } from "../firebase";
 
 const AddCategory = () => {
-  const [category, setCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Now Playing");
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const docRef = await db.collection("categories").add({ name: category });
-      dispatch(addCategory({ id: docRef.id, name: category }));
-      setCategory("");
-    } catch (error) {
-      console.error("Error adding category: ", error);
-    }
+    dispatch(addCategory({ name: selectedCategory }));
+    setSelectedCategory("Now Playing");
   };
 
   return (
-    <div className="p-4">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="Category Name"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-500 text-white rounded"
-        >
-          Add Category
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h1 className="text-2xl mb-4">Add Category</h1>
+      <select
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      >
+        <option value="Now Playing">Now Playing</option>
+        <option value="Top Movies in Theaters">Top Movies in Theaters</option>
+        <option value="Top Rated">Top Rated</option>
+        <option value="Hero Section">Hero Section</option>
+      </select>
+      <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+        Add Category
+      </button>
+    </form>
   );
 };
 

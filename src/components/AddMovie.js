@@ -1,147 +1,134 @@
 import React, { useState } from "react";
-import { db } from "../firebase";
+import { useDispatch } from "react-redux";
+import { addMovie } from "../features/moviesSlice";
 
 const AddMovie = () => {
   const [movie, setMovie] = useState({
-    poster: "",
-    heroImage: "",
     name: "",
     description: "",
     director: "",
     genre: "",
     releaseDate: "",
     language: "",
-    rating: "",
+    imdbRating: "",
     showtime: "",
     trailerLink: "",
+    posterUrl: "", 
   });
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setMovie({ ...movie, [name]: value });
+    setMovie((prevMovie) => ({
+      ...prevMovie,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await db.collection("movies").add(movie);
-      alert("Movie added successfully");
-      setMovie({
-        poster: "",
-        heroImage: "",
-        name: "",
-        description: "",
-        director: "",
-        genre: "",
-        releaseDate: "",
-        language: "",
-        rating: "",
-        showtime: "",
-        trailerLink: "",
-      });
-    } catch (error) {
-      console.error("Error adding movie: ", error);
-    }
+    dispatch(addMovie(movie));
+    setMovie({
+      name: "",
+      description: "",
+      director: "",
+      genre: "",
+      releaseDate: "",
+      language: "",
+      imdbRating: "",
+      showtime: "",
+      trailerLink: "",
+      posterUrl: "", 
+    });
   };
 
   return (
-    <div className="p-4">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="poster"
-          value={movie.poster}
-          onChange={handleChange}
-          placeholder="Poster URL"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="heroImage"
-          value={movie.heroImage}
-          onChange={handleChange}
-          placeholder="Hero Image URL"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="name"
-          value={movie.name}
-          onChange={handleChange}
-          placeholder="Movie Name"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <textarea
-          name="description"
-          value={movie.description}
-          onChange={handleChange}
-          placeholder="Description"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="director"
-          value={movie.director}
-          onChange={handleChange}
-          placeholder="Director"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="genre"
-          value={movie.genre}
-          onChange={handleChange}
-          placeholder="Genre"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="date"
-          name="releaseDate"
-          value={movie.releaseDate}
-          onChange={handleChange}
-          placeholder="Release Date"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="language"
-          value={movie.language}
-          onChange={handleChange}
-          placeholder="Language"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="rating"
-          value={movie.rating}
-          onChange={handleChange}
-          placeholder="IMDB Rating"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="showtime"
-          value={movie.showtime}
-          onChange={handleChange}
-          placeholder="Showtime"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="text"
-          name="trailerLink"
-          value={movie.trailerLink}
-          onChange={handleChange}
-          placeholder="Trailer Link"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-500 text-white rounded"
-        >
-          Add Movie
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h1 className="text-2xl mb-4">Add Movie</h1>
+      <input
+        type="text"
+        name="name"
+        value={movie.name}
+        onChange={handleChange}
+        placeholder="Movie Name"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="posterUrl"
+        value={movie.posterUrl}
+        onChange={handleChange}
+        placeholder="Poster URL"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <textarea
+        name="description"
+        value={movie.description}
+        onChange={handleChange}
+        placeholder="Description"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="director"
+        value={movie.director}
+        onChange={handleChange}
+        placeholder="Director"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="genre"
+        value={movie.genre}
+        onChange={handleChange}
+        placeholder="Genre"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="date"
+        name="releaseDate"
+        value={movie.releaseDate}
+        onChange={handleChange}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="language"
+        value={movie.language}
+        onChange={handleChange}
+        placeholder="Language"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="number"
+        name="imdbRating"
+        value={movie.imdbRating}
+        onChange={handleChange}
+        placeholder="IMDB Rating"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="showtime"
+        value={movie.showtime}
+        onChange={handleChange}
+        placeholder="Showtime"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="text"
+        name="trailerLink"
+        value={movie.trailerLink}
+        onChange={handleChange}
+        placeholder="Trailer Link"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      
+      <button type="submit" className="p-2 bg-blue-500 text-white rounded mt-4">
+        Add Movie
+      </button>
+    </form>
   );
 };
 

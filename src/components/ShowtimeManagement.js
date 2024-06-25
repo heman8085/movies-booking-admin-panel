@@ -1,60 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addShowtime } from "../features/showtimesSlice";
 
 const ShowtimeManagement = () => {
-  const [showtimes, setShowtimes] = useState([]);
-  const [newShowtime, setNewShowtime] = useState("");
+  const [showtime, setShowtime] = useState("");
+  const movies = useSelector((state) => state.movies.movies);
+  const [selectedMovie, setSelectedMovie] = useState("");
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchShowtimes = async () => {
-      const snapshot = await db.collection("showtimes").get();
-      let showtimesList = [];
-      snapshot.forEach((doc) =>
-        showtimesList.push({ id: doc.id, ...doc.data() })
-      );
-      setShowtimes(showtimesList);
-    };
-    fetchShowtimes();
-  }, []);
-
-  const handleAddShowtime = async () => {
-    try {
-      const docRef = await db
-        .collection("showtimes")
-        .add({ time: newShowtime });
-      setShowtimes([...showtimes, { id: docRef.id, time: newShowtime }]);
-      setNewShowtime("");
-    } catch (error) {
-      console.error("Error adding showtime: ", error);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addShowtime({ movieId: selectedMovie, showtime }));
+    setShowtime("");
   };
 
   return (
-    <div className="p-4">
-      <div className="space-y-4">
-        <input
-          type="text"
-          value={newShowtime}
-          onChange={(e) => setNewShowtime(e.target.value)}
-          placeholder="New Showtime"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          onClick={handleAddShowtime}
-          className="w-full p-2 bg-blue-500 text-white rounded"
-        >
-          Add Showtime
-        </button>
-        <div>
-          <h3>Existing Showtimes</h3>
-          <ul>
-            {showtimes.map((showtime) => (
-              <li key={showtime.id}>{showtime.time}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h1 className="text-2xl mb-4">Showtime Management</h1>
+      <select
+        value={selectedMovie}
+        onChange={(e) => setSelectedMovie(e.target.value)}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      >
+        <option value="" disabled>
+          Select Movie
+        </option>
+        {movies.map((movie) => (
+          <option key={movie.id} value={movie.id}>
+            {movie.name}
+          </option>
+        ))}
+      </select>
+      <input
+        type="text"
+        value={showtime}
+        onChange={(e) => setShowtime(e.target.value)}
+        placeholder="Showtime"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+        Add Showtime
+      </button>
+    </form>
   );
 };
 

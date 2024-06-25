@@ -5,6 +5,7 @@ import AddCategory from "../components/AddCategory";
 import AddMovie from "../components/AddMovie";
 import ShowtimeManagement from "../components/ShowtimeManagement";
 import BookedMovies from "../components/BookedMovies";
+import Logout from "./Logout";
 
 const Dashboard = () => {
   return (
@@ -16,6 +17,7 @@ const Dashboard = () => {
           <Route path="/add-movie" element={<AddMovie />} />
           <Route path="/manage-showtimes" element={<ShowtimeManagement />} />
           <Route path="/booked-movies" element={<BookedMovies />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </div>
     </div>
