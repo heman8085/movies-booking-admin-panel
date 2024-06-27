@@ -29,7 +29,9 @@ const Signup = () => {
       <div className="h-screen flex justify-center items-center">
        
           <form onSubmit={handleSubmit} className="space-y-4">
-              <h1>Signup</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center  text-blue-500">
+          Signup
+            </h1>
         <input
           type="email"
           value={email}

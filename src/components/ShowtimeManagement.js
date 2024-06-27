@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchMovies } from "../features/moviesSlice";
 import { addShowtime } from "../features/showtimesSlice";
 
 const ShowtimeManagement = () => {
-  const [showtime, setShowtime] = useState("");
-  const movies = useSelector((state) => state.movies.movies);
+  const [theater, setTheater] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [selectedMovie, setSelectedMovie] = useState("");
   const dispatch = useDispatch();
+  const { movies, status } = useSelector((state) => state.movies);
+
+  useEffect(() => {
+    dispatch(fetchMovies());
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addShowtime({ movieId: selectedMovie, showtime }));
-    setShowtime("");
+    if (selectedMovie && theater && date && time) {
+      const showtime = `${date} ${time}`;
+      dispatch(addShowtime({ movieId: selectedMovie, theater, showtime }));
+      setTheater("");
+      setDate("");
+      setTime("");
+    }
   };
+
+  if (status === "loading") {
+    return <p>Loading movies...</p>;
+  }
+
+  if (status === "failed") {
+    return <p>Failed to load movies.</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="p-4">
@@ -33,9 +53,21 @@ const ShowtimeManagement = () => {
       </select>
       <input
         type="text"
-        value={showtime}
-        onChange={(e) => setShowtime(e.target.value)}
-        placeholder="Showtime"
+        value={theater}
+        onChange={(e) => setTheater(e.target.value)}
+        placeholder="Theater Name"
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+      <input
+        type="time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
         className="w-full p-2 border border-gray-300 rounded mb-4"
       />
       <button type="submit" className="p-2 bg-blue-500 text-white rounded">

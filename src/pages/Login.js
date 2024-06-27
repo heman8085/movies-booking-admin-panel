@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -37,7 +36,9 @@ const Login = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <h1>Login</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center  text-blue-500">
+          Login
+        </h1>
         <input
           type="email"
           value={email}

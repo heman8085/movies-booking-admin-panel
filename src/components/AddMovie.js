@@ -11,9 +11,9 @@ const AddMovie = () => {
     releaseDate: "",
     language: "",
     imdbRating: "",
-    showtime: "",
     trailerLink: "",
-    posterUrl: "", 
+    posterUrl: "",
+    category: "", 
   });
 
   const dispatch = useDispatch();
@@ -37,15 +37,29 @@ const AddMovie = () => {
       releaseDate: "",
       language: "",
       imdbRating: "",
-      showtime: "",
       trailerLink: "",
-      posterUrl: "", 
+      posterUrl: "",
+      category: "", 
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-4">
       <h1 className="text-2xl mb-4">Add Movie</h1>
+      <select
+        name="category"
+        value={movie.category}
+        onChange={handleChange}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      >
+        <option value="" disabled>
+          Select Category
+        </option>
+        <option value="Now Playing">Now Playing</option>
+        <option value="Top Movies in Theaters">Top Movies in Theaters</option>
+        <option value="Top Rated">Top Rated</option>
+        <option value="Hero Section">Hero Section</option>
+      </select>
       <input
         type="text"
         name="name"
@@ -106,14 +120,6 @@ const AddMovie = () => {
         value={movie.imdbRating}
         onChange={handleChange}
         placeholder="IMDB Rating"
-        className="w-full p-2 border border-gray-300 rounded mb-4"
-      />
-      <input
-        type="text"
-        name="showtime"
-        value={movie.showtime}
-        onChange={handleChange}
-        placeholder="Showtime"
         className="w-full p-2 border border-gray-300 rounded mb-4"
       />
       <input
